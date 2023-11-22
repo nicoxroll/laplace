@@ -1,5 +1,7 @@
+// CodeList.jsx
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, CardActions, Button, Grid, Box, Chip } from '@mui/material';
+import { Card, CardContent, Typography, CardActions, Button, Grid, Box } from '@mui/material';
+import CodeDetailsDialog from './CodeDetailsDialog';
 
 interface Code {
   id: number;
@@ -7,48 +9,48 @@ interface Code {
 }
 
 interface CodeListProps {
-  
   codes: Code[];
-  
-  setSelectedCode: (code: Code) => void;
-  setSelectedCodeRaw: (codeComponents: any) => void;
-  setOpenModal: (value: boolean) => void;
   apiUrl: string;
 }
 
-const CodeList: React.FC<CodeListProps> = ({ codes, setSelectedCode, setSelectedCodeRaw, setOpenModal, apiUrl }) => {
-  const [selectedCodeDetails, setSelectedCodeDetails] = useState<any>(null);
+const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedCode, setSelectedCode] = useState<Code | null>(null);
+  const [selectedCodeContent, setSelectedCodeContent] = useState<string>('');
   const [codeResponses, setCodeResponses] = useState<string[]>([]);
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleCodeSubmit = async (event: React.FormEvent, code: Code) => {
     event.preventDefault();
     try {
       const rawUrl = `https://raw.githubusercontent.com/nicoxroll/coffe/master/${code.name}`;
       const response = await fetch(rawUrl);
-  
+
       if (!response.ok) {
         throw new Error(`Failed to fetch raw file: ${response.status} ${response.statusText}`);
       }
-  
+
       const codeContent = await response.text();
-  
-      const apiUrl = '/api/generate'; // Reemplaza esto con tu URL de API real
-      const apiResponse = await fetch(apiUrl, {
+
+      const apiResponse = await fetch('api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ issue: codeContent }),
       });
-  
+
       if (!apiResponse.ok) {
         throw new Error(`API request failed: ${apiResponse.status} ${apiResponse.statusText}`);
       }
-      console.log(codeContent);
+
       const data = await apiResponse.json();
-      setSelectedCode(code);
-      setSelectedCodeRaw(codeContent);
+      setSelectedCodeContent(codeContent);
       setCodeResponses(prevResponses => [...prevResponses, data.result]);
+      setSelectedCode(code);
       setOpenModal(true);
     } catch (error) {
       console.error('Error al obtener los detalles del problema:', error);
@@ -77,6 +79,15 @@ const CodeList: React.FC<CodeListProps> = ({ codes, setSelectedCode, setSelected
           </Box>
         </Grid>
       ))}
+      {selectedCode && (
+        <CodeDetailsDialog
+          code={selectedCode}
+          codeContent={selectedCodeContent}
+          openModal={openModal}
+          handleCloseModal={handleCloseModal}
+          codeResponses={codeResponses}
+        />
+      )}
     </Grid>
   );
 };

@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
-import IssueList from './IssueList';
-import IssueDetailsDialog from './IssueDetailsDialog';
+import CodeList from './codeComponents/CodeList';
+import CodeDetailsDialog from './codeComponents/CodeDetailsDialog';
 
-const GitHubIssue: React.FC = () => {
+interface Code {
+  name: string;
+  download_url: string | null;
+}
+
+const GitHubCode: React.FC = () => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
-  const [issues, setIssues] = useState<any[]>([]);
-  const [selectedIssue, setSelectedIssue] = useState<any | null>(null);
+  const [codes, setCodes] = useState<Code[]>([]);
+  const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -18,13 +23,17 @@ const GitHubIssue: React.FC = () => {
       setError('');
 
       try {
-        const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/issues';
+        const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/contents';
         const response = await axios.get(apiUrl);
-        const apiData = response.data;
+        const apiData: Code[] = response.data;
+        console.log(apiData);
 
-        setIssues(apiData);
+        // Filtrar los elementos con download_url en null
+        const filteredCodes = apiData.filter((code) => code.download_url !== null);
+
+        setCodes(filteredCodes);
       } catch (error) {
-        setError('Error al obtener los issues');
+        setError('Error al obtener los contenidos');
       }
     } else {
       setError('La URL debe ser de GitHub');
@@ -38,7 +47,7 @@ const GitHubIssue: React.FC = () => {
   return (
     <Container maxWidth="md">
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-        <Typography variant="h4" sx={{ mb: 2 }}>GitHub Issues Smells</Typography>
+        <Typography variant="h4" sx={{ mb: 2 }}>GitHub Code Smells</Typography>
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -55,16 +64,16 @@ const GitHubIssue: React.FC = () => {
           </Button>
         </form>
 
-        {issues.length > 0 && (
+        {codes.length > 0 && (
           <Box mt={2}>
-            <IssueList issues={issues} setSelectedIssue={setSelectedIssue} setOpenModal={setOpenModal} />
+            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
           </Box>
         )}
 
-        {selectedIssue && (
+        {selectedCode && (
           <Box mt={2}>
-            <IssueDetailsDialog
-              issue={selectedIssue}
+            <CodeDetailsDialog
+              code={selectedCode}
               openModal={openModal}
               handleCloseModal={() => setOpenModal(false)}
             />
@@ -75,4 +84,4 @@ const GitHubIssue: React.FC = () => {
   );
 };
 
-export default GitHubIssue;
+export default GitHubCode;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// CodeDetailsDialog.jsx
+import React from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button } from '@mui/material';
 import BadSmells from '../BadSmells';
 
@@ -7,50 +8,16 @@ interface CodeDetailsDialogProps {
   codeContent: any;
   openModal: boolean;
   handleCloseModal: () => void;
+  codeResponses: string[];
 }
 
-const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent, openModal, handleCloseModal }) => {
-  const [response, setResponse] = useState<string>('');
-  const [responseArray, setResponseArray] = useState<string[]>([]);
-
-  useEffect(() => {
-    async function fetchOpenAIResponse() {
-      try {
-        const openAIResponse = await fetchOpenAI();
-        setResponse(openAIResponse);
-      } catch (error) {
-        console.error('Error fetching OpenAI response:', error);
-        // Manejar el error según tus necesidades
-      }
-    }
-
-    if (openModal) {
-      fetchOpenAIResponse();
-    }
-  }, [openModal]);
-
-  useEffect(() => {
-    if (response) {
-      const array = response.split(',');
-      setResponseArray(array);
-    }
-  }, [response]);
-
-
-  
-  async function fetchOpenAI() {
-    
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ issue: codeContent }),
-    });
-    const data = await response.json();
-    return data.result;
-  }
-
+const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({
+  code,
+  codeContent,
+  openModal,
+  handleCloseModal,
+  codeResponses,
+}) => {
   return (
     <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
       <DialogTitle>Detalles del Codigo</DialogTitle>
@@ -64,7 +31,7 @@ const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeConten
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:
         </Typography>
-        <BadSmells smells={responseArray} />
+        <BadSmells smells={codeResponses} />
         <Button onClick={handleCloseModal} color="primary" variant="contained">
           Cerrar
         </Button>
@@ -73,4 +40,4 @@ const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeConten
   );
 };
 
-export default IssueDetailsDialog;
+export default CodeDetailsDialog;
