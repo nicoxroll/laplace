@@ -4,25 +4,35 @@ import { TextField, Button, Typography, Box, Container } from '@mui/material';
 import CodeList from './codeComponents/CodeList';
 import CodeDetailsDialog from './codeComponents/CodeDetailsDialog';
 
+interface Code {
+  name: string;
+  url: string;
+  download_url: string | null;
+}
+
 const GitHubCode: React.FC = () => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
-  const [code, setCodes] = useState<any[]>([]);
-  const [selectedCode, setSelectedCode] = useState<any | null>(null);
+  const [codes, setCodes] = useState<Code[]>([]);
+  const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     if (url.includes('github.com')) {
       setError('');
-  
+
       try {
         const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/contents';
         const response = await axios.get(apiUrl);
-        const apiData = response.data;
-  
-        setCodes(apiData);
+        const apiData: Code[] = response.data;
+        console.log(apiData);
+
+        // Filtrar los elementos con download_url en null
+        const filteredCodes = apiData.filter((code) => code.download_url !== null);
+
+        setCodes(filteredCodes);
       } catch (error) {
         setError('Error al obtener los contenidos');
       }
@@ -55,9 +65,9 @@ const GitHubCode: React.FC = () => {
           </Button>
         </form>
 
-        {code.length > 0 && (
+        {codes.length > 0 && (
           <Box mt={2}>
-            <CodeList code={code} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
           </Box>
         )}
 

@@ -6,6 +6,7 @@ import CodeDetailsDialog from './CodeDetailsDialog';
 interface Code {
   id: number;
   name: string;
+  download_url: string;
 }
 
 interface CodeListProps {
@@ -26,7 +27,11 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
   const handleCodeSubmit = async (event: React.FormEvent, code: Code) => {
     event.preventDefault();
     try {
-      const rawUrl = `https://raw.githubusercontent.com/nicoxroll/coffe/master/${code.name}`;
+      const startIndex = code.download_url.indexOf(".com/") + 5;
+const endIndex = code.download_url.indexOf(`${code.name}`);
+const repowner = code.download_url.substring(startIndex, endIndex)
+console.log(repowner);
+      const rawUrl = `https://raw.githubusercontent.com/${repowner}/${code.name}`;
       const response = await fetch(rawUrl);
 
       if (!response.ok) {

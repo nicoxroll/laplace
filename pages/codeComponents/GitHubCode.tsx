@@ -7,7 +7,7 @@ import CodeDetailsDialog from './CodeDetailsDialog';
 const GitHubCode: React.FC = () => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
-  const [code, setCodes] = useState<any[]>([]);
+  const [codes, setCodes] = useState<any[]>([]);
   const [selectedCode, setSelectedCode] = useState<any | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
@@ -55,9 +55,9 @@ const GitHubCode: React.FC = () => {
           </Button>
         </form>
 
-        {code.length > 0 && (
+        {codes.length > 0 && (
           <Box mt={2}>
-            <CodeList code={code} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
           </Box>
         )}
 
