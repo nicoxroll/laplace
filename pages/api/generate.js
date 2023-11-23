@@ -55,7 +55,7 @@ export default async function (req, res) {
 function generatePrompt(issue) {
   const capitalizedIssue =
     issue[0].toUpperCase() + issue.slice(1).toLowerCase();
-  return `Decime los Bads Smells que se pueden entender de el texto que te proporciono. Separados por ,
+  return `a que BadSmell se refiere con el siguiente Issue? Si es mas de 1 damelo separado por coma:
   ${capitalizedIssue}
 `;
 }

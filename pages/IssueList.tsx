@@ -19,6 +19,7 @@ const BadSmell: React.FC<{ smell: string }> = ({ smell }) => {
 };
 
 const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpenModal, apiUrl }) => {
+  
   const [selectedIssueDetails, setSelectedIssueDetails] = useState<any>(null);
   const [issueResponses, setIssueResponses] = useState<string[]>([]);
 
@@ -75,17 +76,6 @@ const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpen
           </Box>
         </Grid>
       ))}
-
-      {issueResponses.length > 0 && (
-        <Grid item xs={12}>
-          <Typography variant="h5" gutterBottom>Respuestas:</Typography>
-          <ul>
-            {issueResponses.map((response, index) => (
-              <li key={index}>{response}</li>
-            ))}
-          </ul>
-        </Grid>
-      )}
     </Grid>
   );
 };

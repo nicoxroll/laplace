@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button } from '@mui/material';
-import BadSmells from './BadSmells';
+import BadSmells from '../BadSmells';
 
-interface IssueDetailsDialogProps {
-  issue: any;
+interface CodeDetailsDialogProps {
+  code: any;
+  codeContent: any;
   openModal: boolean;
   handleCloseModal: () => void;
 }
 
-const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModal, handleCloseModal }) => {
+const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent, openModal, handleCloseModal }) => {
   const [response, setResponse] = useState<string>('');
   const [responseArray, setResponseArray] = useState<string[]>([]);
 
@@ -35,13 +36,16 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
     }
   }, [response]);
 
+
+  
   async function fetchOpenAI() {
+    
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ issue: issue.body }),
+      body: JSON.stringify({ issue: codeContent }),
     });
     const data = await response.json();
     return data.result;
@@ -49,26 +53,26 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
 
   return (
     <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
-    <DialogTitle>Detalles del Issue</DialogTitle>
-    <DialogContent>
-      <Typography variant="h6" gutterBottom>
-        Título: {issue.title}
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        Cuerpo del Issue: {issue.body}
-      </Typography>
-      <Typography variant="h6" gutterBottom>
-        Respuesta de OpenAI:
-      </Typography>
-      <div style={{ marginTop: '10px' }}>
+      <DialogTitle>Detalles del Codigo</DialogTitle>
+      <DialogContent>
+        <Typography variant="h6" gutterBottom>
+          Título: {code.name}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Codigo: {codeContent}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          Respuesta de OpenAI:
+        </Typography>
+        <div style={{ marginTop: '10px' }}>
         <BadSmells smells={responseArray} />
       </div>
       <div style={{ borderBottom: '1px solid #ccc', margin: '10px 0' }}></div> {/* Línea divisoria */}
       <Button onClick={handleCloseModal} color="primary" variant="contained" style={{ marginTop: '10px' }}>
         Cerrar
       </Button>
-    </DialogContent>
-  </Dialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 
