@@ -40,7 +40,7 @@ console.log(repowner);
 
       const codeContent = await response.text();
 
-      const apiResponse = await fetch('api/generate', {
+      const apiResponse = await fetch('api/code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

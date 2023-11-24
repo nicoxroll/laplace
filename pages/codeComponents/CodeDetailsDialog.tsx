@@ -40,7 +40,7 @@ const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeConten
   
   async function fetchOpenAI() {
     
-    const response = await fetch('/api/generate', {
+    const response = await fetch('/api/code', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,9 +64,8 @@ const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeConten
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:
         </Typography>
-        <div style={{ marginTop: '10px' }}>
-        <BadSmells smells={responseArray} />
-      </div>
+        {responseArray}
+
       <div style={{ borderBottom: '1px solid #ccc', margin: '10px 0' }}></div> {/* Línea divisoria */}
       <Button onClick={handleCloseModal} color="primary" variant="contained" style={{ marginTop: '10px' }}>
         Cerrar

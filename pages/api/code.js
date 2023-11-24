@@ -19,7 +19,7 @@ export default async function (req, res) {
   if (issue.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid Issue",
+        message: "Please enter a valid Code",
       }
     });
     return;
@@ -30,7 +30,7 @@ export default async function (req, res) {
       model: "text-davinci-003",
       prompt: generatePrompt(issue),
       temperature: 0,
-      max_tokens:100,
+      max_tokens:300,
     });
     
     const response = completion.data.choices[0].text;
@@ -55,7 +55,7 @@ export default async function (req, res) {
 function generatePrompt(issue) {
   const capitalizedIssue =
     issue[0].toUpperCase() + issue.slice(1).toLowerCase();
-  return `a que BadSmell de UX/UI se refiere con el siguiente Issue? Si es mas de 1 damelo separado por coma:
+  return `Decime que vulnerabilidades encuentras de las CVE o CWE en el mismo:
   
   ${capitalizedIssue}
 `;

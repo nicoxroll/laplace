@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography, Box, Container } from '@mui/material';
+import { TextField, Button, Typography, Box, Container, CircularProgress } from '@mui/material';
 import CodeList from './codeComponents/CodeList';
 import CodeDetailsDialog from './codeComponents/CodeDetailsDialog';
 
@@ -16,12 +16,14 @@ const GitHubCode: React.FC = () => {
   const [codes, setCodes] = useState<Code[]>([]);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false); // Estado para controlar la carga
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (url.includes('github.com')) {
       setError('');
+      setLoading(true); // Activar el estado de carga
 
       try {
         const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/contents';
@@ -29,12 +31,32 @@ const GitHubCode: React.FC = () => {
         const apiData: Code[] = response.data;
         console.log(apiData);
 
-        // Filtrar los elementos con download_url en null
-        const filteredCodes = apiData.filter((code) => code.download_url !== null);
+        const filteredCodes: Code[] = [];
+
+        const processItems = async (items: Code[]) => {
+          for (const item of items) {
+            if (
+              item.download_url !== null &&
+              !['.scss', '.css', '.ico', '.jpg', '.jpeg', '.svg', '.woff', '.eot', '.png', '.gif'].some(extension => item.download_url!.endsWith(extension))
+            ) {
+              filteredCodes.push(item);
+            } else if (item.download_url === null) {
+              const subUrl = item.url;
+              const subResponse = await axios.get(subUrl);
+              const subApiData: Code[] = subResponse.data;
+
+              await processItems(subApiData);
+            }
+          }
+        };
+
+        await processItems(apiData);
 
         setCodes(filteredCodes);
       } catch (error) {
         setError('Error al obtener los contenidos');
+      } finally {
+        setLoading(false); // Desactivar el estado de carga después de la petición
       }
     } else {
       setError('La URL debe ser de GitHub');
@@ -65,11 +87,15 @@ const GitHubCode: React.FC = () => {
           </Button>
         </form>
 
-        {codes.length > 0 && (
+        {loading ? ( // Mostrar el componente de carga si el estado de carga está activo
+          <Box mt={2}>
+            <CircularProgress />
+          </Box>
+        ) : codes.length > 0 ? (
           <Box mt={2}>
             <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
           </Box>
-        )}
+        ) : null}
 
         {selectedCode && (
           <Box mt={2}>
