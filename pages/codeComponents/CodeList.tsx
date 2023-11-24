@@ -1,6 +1,6 @@
-// CodeList.jsx
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, CardActions, Button, Grid, Box } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
+import { InsertDriveFile, Code, Extension } from '@mui/icons-material';
 import CodeDetailsDialog from './CodeDetailsDialog';
 
 interface Code {
@@ -24,13 +24,12 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
     setOpenModal(false);
   };
 
-  const handleCodeSubmit = async (event: React.FormEvent, code: Code) => {
-    event.preventDefault();
+  const handleCodeClick = async (code: Code) => {
     try {
       const startIndex = code.download_url.indexOf(".com/") + 5;
-const endIndex = code.download_url.indexOf(`${code.name}`);
-const repowner = code.download_url.substring(startIndex, endIndex)
-console.log(repowner);
+      const endIndex = code.download_url.indexOf(`${code.name}`);
+      const repowner = code.download_url.substring(startIndex, endIndex);
+      console.log(repowner);
       const rawUrl = `https://raw.githubusercontent.com/${repowner}/${code.name}`;
       const response = await fetch(rawUrl);
 
@@ -62,26 +61,30 @@ console.log(repowner);
     }
   };
 
+  const getIconByExtension = (name: string) => {
+
+    if (name.includes('package') || name.includes('requirements') || name.includes('pom.xml')|| name.includes('composer')) {
+      return <InsertDriveFile />;
+    } else return <Code />;
+
+
+  };
+
   return (
     <Grid container spacing={2}>
       {codes.map((code) => (
-        <Grid item xs={12} key={code.id}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Card sx={{ width: '100%', border: '1px solid rgba(0, 0, 0, 0.2)', backgroundColor: '#f5f5f5' }}>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>
-                  {code.name}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <form onSubmit={(event) => handleCodeSubmit(event, code)}>
-                  <Button size="small" color="primary" id="code" type="submit">
-                    Ver detalles
-                  </Button>
-                </form>
-              </CardActions>
-            </Card>
-          </Box>
+        <Grid item xs={12} sm={6} md={4} key={code.id}>
+          <Card
+            sx={{ height: '100%', cursor: 'pointer' }}
+            onClick={() => handleCodeClick(code)}
+          >
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                {code.name}
+              </Typography>
+              {getIconByExtension(code.name || '')}
+            </CardContent>
+          </Card>
         </Grid>
       ))}
       {selectedCode && (

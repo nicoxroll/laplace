@@ -7,8 +7,10 @@ interface BadSmellsProps {
 
 const BadSmells: React.FC<BadSmellsProps> = ({ smells }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [selectedSmell, setSelectedSmell] = useState('');
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (smell: string) => {
+    setSelectedSmell(smell);
     setOpenDialog(true);
   };
 
@@ -19,17 +21,20 @@ const BadSmells: React.FC<BadSmellsProps> = ({ smells }) => {
   return (
     <div>
       {smells.map((smell, index) => (
-        <Chip key={index} label={smell} color="primary" onClick={handleOpenDialog} />
+        <Chip
+          key={index}
+          label={smell}
+          color="primary"
+          onClick={() => handleOpenDialog(smell)}
+        />
       ))}
 
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
-        <DialogTitle>Bad Smells</DialogTitle>
+        <DialogTitle>Información Detallada</DialogTitle>
         <DialogContent dividers>
-          {smells.map((smell, index) => (
-            <Typography key={index} variant="body1" style={{ margin: '4px' }}>
-              {smell}
-            </Typography>
-          ))}
+          <Typography variant="body1" style={{ margin: '4px' }}>
+            {selectedSmell}
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cerrar</Button>

@@ -23,6 +23,8 @@ const GitHubIssue: React.FC = () => {
         const response = await axios.get(apiUrl);
         const apiData = response.data;
 
+
+
         setIssues(apiData);
       } catch (error) {
         setError('Error al obtener los issues');
@@ -46,11 +48,13 @@ const GitHubIssue: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-        <Typography variant="h4" sx={{ mb: 2 }}>GitHub Issues Smells</Typography>
+  <Container maxWidth="md">
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        GitHub Issues Smells
+      </Typography>
 
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           <TextField
             label="URL de GitHub"
             variant="outlined"
@@ -65,50 +69,53 @@ const GitHubIssue: React.FC = () => {
           </Button>
         </form>
 
-        {loading ? ( // Mostrar la animación de carga si loading es true
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <CircularProgress size={100}/>
-          </Box>
-        ) : issues.length > 0 ? (
-          <Box mt={2}>
-            {issues.map((issue: any, index: number) => (
-              <Card key={index} sx={{ width: '100%', mb: 2 }}>
-                <CardContent>
-                  <Typography variant="h6" component="div" sx={{ mb: 1 }}>
-                    {truncateText(issue.title, 50)}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {truncateText(issue.body, 140)}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2 }}
-                    onClick={() => {
-                      setSelectedIssue(issue);
-                      setOpenModal(true);
-                    }}
-                  >
-                    Ver detalles
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-        ) : null}
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          {/* ... */}
+        </Box>
+      ) : issues.length > 0 ? (
+        <Box mt={2}>
+          {issues.map((issue: any, index: number) => (
+            <Card
+              key={index}
+              sx={{
+                width: '100%',
+                mb: 2,
+                borderRadius: '16px',
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                transition: 'box-shadow 0.3s',
+                '&:hover': {
+                  boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
+                },
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+                  {truncateText(issue.title, 50)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {truncateText(issue.body, 140)}
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap', mt: 2 }}>
+                  {issue.labels.map((label: any) => (
+                    <Chip
+                      key={label.id}
+                      label={label.name}
+                      variant="outlined"
+                      sx={{ mr: 1, mb: 1 }}
+                    />
+                  ))}
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      ) : null}
 
-        {selectedIssue && (
-          <Box mt={2}>
-            <IssueDetailsDialog
-              issue={selectedIssue}
-              openModal={openModal}
-              handleCloseModal={() => setOpenModal(false)}
-            />
-          </Box>
-        )}
-      </Box>
-    </Container>
-  );
+      {/* ... */}
+    </Box>
+  </Container>
+);
 };
 
 export default GitHubIssue;

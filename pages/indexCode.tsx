@@ -3,7 +3,8 @@ import axios from 'axios';
 import { TextField, Button, Typography, Box, Container, CircularProgress } from '@mui/material';
 import CodeList from './codeComponents/CodeList';
 import CodeDetailsDialog from './codeComponents/CodeDetailsDialog';
-import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
+import { ResponsiveContainer } from 'recharts';
+import PieChartComponent from './PieChartComponent';
 
 interface Code {
   name: string;
@@ -29,7 +30,10 @@ const GitHubCode: React.FC = () => {
 
       try {
         const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/contents';
-        const response = await axios.get(apiUrl);
+
+        
+        const response = await axios.get(`${apiUrl}`)
+
         const apiData: Code[] = response.data.map((item: any) => ({
           ...item,
           extension: item.name.split('.').pop() || '', // Obtener la extensión del nombre del archivo
@@ -41,7 +45,16 @@ const GitHubCode: React.FC = () => {
           for (const item of items) {
             if (
               item.download_url !== null &&
-              !['.scss', '.css', '.ico', '.jpg', '.jpeg', '.svg', '.woff', '.eot', '.png', '.gif'].some(extension => item.download_url!.endsWith(extension))
+              ! [
+                '.scss', '.css', '.ico', '.jpg', '.avif', '.gitignore', '.mp4', '.mp3',
+                '.ttf', '.webm', '.jpeg', '.svg', '.woff', '.eot', '.png', '.gif', '.pdf',
+                '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar', '.tar',
+                '.gz', '.7z', '.exe', '.dmg', '.pkg', '.iso', '.csv', '.xml', '.txt', '.rtf',
+                '.log', '.bak', '.psd', '.ai', '.eps', '.tif', '.tiff', '.bmp', '.mov', '.avi',
+                '.wav', '.ogg', '.flac', '.aac', '.example', '.htm', '.srt', '.sub', '.ass',
+                '.vtt', '.xample'
+              ]
+              .some(extension => item.download_url!.endsWith(extension))
             ) {
               filteredCodes.push(item);
             } else if (item.download_url === null) {
@@ -110,60 +123,48 @@ const GitHubCode: React.FC = () => {
         <Typography variant="h4" sx={{ mb: 2 }}>GitHub Code Smells</Typography>
 
         <form onSubmit={handleSubmit}>
-          <TextField
-            label="URL de GitHub"
-            variant="outlined"
-            fullWidth
-            value={url}
-            onChange={handleChange}
-            error={Boolean(error)}
-            helperText={error}
-          />
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-            Obtener datos
-          </Button>
-        </form>
+      <TextField
+        label="URL de GitHub"
+        variant="outlined"
+        fullWidth
+        value={url}
+        onChange={handleChange}
+        error={Boolean(error)}
+        helperText={error}
+      />
+      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+        Obtener datos
+      </Button>
+    </form>
 
-        {loading ? (
-          <Box mt={2}>
-            <CircularProgress />
-          </Box>
-        ) : codes.length > 0 ? (
-          <Box mt={2}>
-            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
-          </Box>
-        ) : null}
+    {loading ? (
+      <Box mt={2}>
+        <CircularProgress size={100}/>
+      </Box>
+    ) : (
+      <React.Fragment>
+        <Box mt={2} width="100%" height={300}>
+          <ResponsiveContainer>
+            <PieChartComponent data={extensionData} />
+          </ResponsiveContainer>
+        </Box>
 
         {codes.length > 0 && (
-          <Box mt={2} width="100%" height={300}>
-            <ResponsiveContainer>
-            <PieChart>
-  <Pie
-    data={extensionData}
-    innerRadius={60} // Ajustar según tus necesidades
-    outerRadius={80} // Ajustar según tus necesidades
-    fill="#8884d8"
-    dataKey="count"
-    label={({ extension, count }) => `${extension}: ${count}`} // Modificar para mostrar la extensión seguida de la cantidad
-  >
-    {extensionData.map((entry, index) => (
-      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-    ))}
-  </Pie>
-  <Tooltip />
-</PieChart>
-        </ResponsiveContainer>
-      </Box>
-    )}
+          <Box mt={2} width="100%">
+            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+          </Box>
+        )}
 
-    {selectedCode && (
-      <Box mt={2}>
-        <CodeDetailsDialog
-          code={selectedCode}
-          openModal={openModal}
-          handleCloseModal={() => setOpenModal(false)}
-        />
-      </Box>
+        {selectedCode && (
+          <Box mt={2}>
+            <CodeDetailsDialog
+              code={selectedCode}
+              openModal={openModal}
+              handleCloseModal={() => setOpenModal(false)}
+            />
+          </Box>
+        )}
+      </React.Fragment>
     )}
   </Box>
 </Container>
@@ -171,5 +172,3 @@ const GitHubCode: React.FC = () => {
 };
 
 export default GitHubCode;
-
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f50', '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF0000'];
