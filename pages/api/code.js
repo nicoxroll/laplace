@@ -55,7 +55,7 @@ export default async function (req, res) {
 function generatePrompt(issue) {
   const capitalizedIssue =
     issue[0].toUpperCase() + issue.slice(1).toLowerCase();
-  return `Decime que vulnerabilidades encuentras de las CVE o CWE en el mismo:
+  return `Decime que vulnerabilidades encuentras de las CVE o CWE en el mismo (si es mas de uno separado por coma):
   
   ${capitalizedIssue}
 `;

@@ -64,8 +64,9 @@ const IssueDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeConten
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:
         </Typography>
-        {responseArray}
-
+        <div style={{ marginTop: '10px' }}>
+        <BadSmells smells={responseArray} />
+      </div>
       <div style={{ borderBottom: '1px solid #ccc', margin: '10px 0' }}></div> {/* Línea divisoria */}
       <Button onClick={handleCloseModal} color="primary" variant="contained" style={{ marginTop: '10px' }}>
         Cerrar
