@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography, Box, Container, Card, CardContent, CircularProgress } from '@mui/material';
+import { TextField, Button, Typography, Box, Container, Card, CardContent, CircularProgress, Chip } from '@mui/material';
 import IssueDetailsDialog from './IssueDetailsDialog';
 
 const GitHubIssue: React.FC = () => {
@@ -65,7 +65,7 @@ const GitHubIssue: React.FC = () => {
           </Button>
         </form>
 
-        {loading ? ( // Mostrar la animación de carga si loading es true
+        {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <CircularProgress size={100}/>
           </Box>
@@ -80,6 +80,17 @@ const GitHubIssue: React.FC = () => {
                   <Typography variant="body2" color="text.secondary">
                     {truncateText(issue.body, 140)}
                   </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 1 }}>
+                    {issue.labels.map((label: any, labelIndex: number) => (
+                      <Chip
+                        key={labelIndex}
+                        label={label.name}
+                        color="primary"
+                        variant="outlined"
+                        sx={{ mr: 1, mb: 1 }}
+                      />
+                    ))}
+                  </Box>
                   <Button
                     variant="contained"
                     color="primary"
