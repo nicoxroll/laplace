@@ -57,6 +57,6 @@ function generatePrompt(issue) {
     issue[0].toUpperCase() + issue.slice(1).toLowerCase();
   return `Decime que vulnerabilidades encuentras de las CVE o CWE en el mismo (si es mas de uno separado por coma):
   
-  ${capitalizedIssue}
+  ${capitalizedIssue} 
 `;
 }

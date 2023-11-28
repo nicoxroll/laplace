@@ -39,7 +39,7 @@ const GitHubIssue: React.FC = () => {
   };
 
   const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
+    if (text.toString().length > maxLength) {
       return text.slice(0, maxLength) + '...';
     }
     return text;

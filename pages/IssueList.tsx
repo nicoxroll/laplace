@@ -11,43 +11,20 @@ interface IssueListProps {
   issues: Issue[];
   setSelectedIssue: (issue: Issue) => void;
   setOpenModal: (value: boolean) => void;
-  apiUrl: '/api/generate';
 }
 
 const BadSmell: React.FC<{ smell: string }> = ({ smell }) => {
   return <Chip label={smell} color="secondary" />;
 };
 
-const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpenModal, apiUrl }) => {
+const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpenModal }) => {
   
-  const [selectedIssueDetails, setSelectedIssueDetails] = useState<any>(null);
-  const [issueResponses, setIssueResponses] = useState<string[]>([]);
-
   
   
   const handleIssueSubmit = async (event: React.FormEvent, issue: Issue) => {
     event.preventDefault();
-    try {
-      const response = await fetch('api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ issue: issue.body }),
-      });
-
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
-      }
-
-      setSelectedIssue(issue);
-      setIssueResponses(prevResponses => [...prevResponses, data.result]);
-      setOpenModal(true);
-    } catch (error) {
-      console.error('Error al obtener los detalles del problema:', error);
-      
-    }
+    setSelectedIssue(issue);
+    setOpenModal(true);
   };
 
   return (

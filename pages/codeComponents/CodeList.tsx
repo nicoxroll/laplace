@@ -39,21 +39,9 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
 
       const codeContent = await response.text();
 
-      const apiResponse = await fetch('api/code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ issue: codeContent }),
-      });
 
-      if (!apiResponse.ok) {
-        throw new Error(`API request failed: ${apiResponse.status} ${apiResponse.statusText}`);
-      }
-
-      const data = await apiResponse.json();
       setSelectedCodeContent(codeContent);
-      setCodeResponses(prevResponses => [...prevResponses, data.result]);
+
       setSelectedCode(code);
       setOpenModal(true);
     } catch (error) {
