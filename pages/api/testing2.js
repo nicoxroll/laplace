@@ -37,14 +37,14 @@ export default async function (req, res) {
     let ok = true;
 
     while (ok) {
-      await sleep(5000); // Esperar 5 segundos
-
+      
       const retry = await openai.beta.threads.runs.retrieve(thread.id, run.id);
       console.log(retry.status);
-
+      
       if (retry.status !== "in_progress") {
         ok = false; // Cambiar el valor de ok si el estado no es "in_progress"
-  }
+      }
+      await sleep(3000); // Esperar 3 segundos
 }
     console.log("mensajes:")
     const messages = await openai.beta.threads.messages.list(

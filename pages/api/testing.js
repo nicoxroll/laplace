@@ -22,7 +22,7 @@ export default async function (req, res) {
     
     const message = await openai.beta.threads.messages.create(thread.id, {
       role: "user",
-      content: "Del siguiente texto dame como respuesta sin ningun tipo de introduccion los Badsmells de UX/UI que detectas separados por coma del estilo BadSmell1, BadSmell2: "+req.body.issue
+      content: "Del siguiente texto dame como respuesta sin ningun tipo de introduccion los Badsmells de UX/UI que detectas separados por coma del estilo BadSmell1, BadSmell2, BadSmell3. Tenes que compararlo con la base de conocimiento que te proporcione y decirme de cual es: "+req.body.issue
     });
 
     console.log(message)
@@ -32,11 +32,21 @@ export default async function (req, res) {
     })
 
 
-    console.log(run.status)
-    await sleep(8000);
+    console.log(run.status);
+    await openai.beta.threads.runs.retrieve(thread.id, run.id);
 
-    const retry = await openai.beta.threads.runs.retrieve(thread.id, run.id) 
-    console.log(retry)
+    let ok = true;
+
+    while (ok) {
+      
+      const retry = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      console.log(retry.status);
+      
+      if (retry.status !== "in_progress") {
+        ok = false; // Cambiar el valor de ok si el estado no es "in_progress"
+      }
+      await sleep(3000); // Esperar 3 segundos
+}
     console.log("mensajes:")
     const messages = await openai.beta.threads.messages.list(
       thread.id

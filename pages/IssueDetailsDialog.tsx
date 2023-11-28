@@ -41,13 +41,15 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
   }, [response]);
 
   async function fetchOpenAI() {
+    const content = issue.title + ' --- ' + issue.body;
     const response = await fetch('/api/testing', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ issue: issue.body }),
+      body: JSON.stringify({ issue: content }),
     });
+    console.log(content)
     const data = await response.json();
     return data.result;
   }
