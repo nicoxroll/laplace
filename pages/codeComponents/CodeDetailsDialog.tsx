@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress } from '@mui/material';
 import BadSmells from '../BadSmells';
 
+
 interface CodeDetailsDialogProps {
   code: any;
   codeContent: any;
@@ -61,7 +62,10 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
           Título: {code.name}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Codigo: {codeContent}
+          Codigo:
+
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{codeContent}</pre>
+
         </Typography>
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:

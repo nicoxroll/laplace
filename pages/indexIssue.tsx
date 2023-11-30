@@ -78,7 +78,7 @@ const GitHubIssue: React.FC = () => {
                     {truncateText(issue.title, 50)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {truncateText(issue.body, 140)}
+                      {typeof issue.body === 'string' ? truncateText(issue.body, 140) : ''}
                   </Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 1 }}>
                     {issue.labels.map((label: any, labelIndex: number) => (
