@@ -5,6 +5,7 @@ interface CardIssueProps {
   issue: any;
   truncateText: (text: string, maxLength: number) => string;
   handleClick: (issue: any) => void;
+
 }
 
 const CardIssue: React.FC<CardIssueProps> = ({ issue, truncateText, handleClick}) => {

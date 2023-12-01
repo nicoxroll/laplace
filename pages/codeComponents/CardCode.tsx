@@ -10,12 +10,12 @@ interface Code {
   size: number; // Agregar propiedad de tamaño
 }
 
-interface CodeListProps {
+interface CardCodeProps {
   codes: Code[];
   apiUrl: string;
 }
 
-const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
+const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [selectedCodeContent, setSelectedCodeContent] = useState<string>('');
@@ -97,4 +97,4 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
   );
 };
 
-export default CodeList;
+export default CardCode;

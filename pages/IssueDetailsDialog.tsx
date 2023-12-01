@@ -9,15 +9,19 @@ interface IssueDetailsDialogProps {
   handleCloseModal: () => void;
 }
 
-const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModal, handleCloseModal }) => {
+const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModal, handleCloseModal}) => {
   const [response, setResponse] = useState<string>('');
   const [responseArray, setResponseArray] = useState<string[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     if (response) {
       const array = response.toString().split(',');
       setResponseArray(array);
+    } else {
+      setResponseArray([]);
     }
   }, [response]);
 
@@ -51,7 +55,7 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
 
   return (
     <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
-      <DialogTitle>Detalles del Codigo</DialogTitle>
+      <DialogTitle>Detalles del Issue</DialogTitle>
       <DialogContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ overflowY: 'auto', flexGrow: 1 }}>
           <Typography variant="h6" gutterBottom>
@@ -60,8 +64,6 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
           </Typography>
-
-          
         </div>
 
         {isLoading && (

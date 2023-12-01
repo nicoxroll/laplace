@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Box, Container, CircularProgress } from '@mui/material';
-import CodeList from './CodeList';
+import CardCode from './CardCode';
 import CodeDetailsDialog from './CodeDetailsDialog';
 import { ResponsiveContainer } from 'recharts';
 import PieChartComponent from '../PieChartComponent';
@@ -152,7 +152,7 @@ const GitHubCode: React.FC = () => {
 
             {codes.length > 0 && (
               <Box mt={2} width="100%">
-                <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+                <CardCode codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
               </Box>
             )}
 
