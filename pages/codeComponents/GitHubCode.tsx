@@ -11,6 +11,7 @@ interface Code {
   url: string;
   download_url: string | null;
   extension: string; // Agregar propiedad de extensión
+  size: number; // Agregar propiedad de tamaño
 }
 
 const GitHubCode: React.FC = () => {
@@ -31,12 +32,11 @@ const GitHubCode: React.FC = () => {
       try {
         const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/contents';
 
-        
-        const response = await axios.get(`${apiUrl}`)
+        const response = await axios.get(`${apiUrl}`);
 
         const apiData: Code[] = response.data.map((item: any) => ({
           ...item,
-          extension: item.name.split('.').pop() || '', // Obtener la extensión del nombre del archivo
+          extension: item.name.split('.').pop() || '',
         }));
 
         const filteredCodes: Code[] = [];
@@ -65,7 +65,7 @@ const GitHubCode: React.FC = () => {
                 ...subItem,
                 extension: subItem.name.split('.').pop() || '',
               }));
-        
+
               const subPath = parentPath ? `${parentPath}/${item.name}` : item.name;
               await processItems(subApiData, subPath);
             }
@@ -92,10 +92,9 @@ const GitHubCode: React.FC = () => {
     setUrl(event.target.value);
   };
 
-  
   const getExtensionData = () => {
     const extensionCounts: { [key: string]: number } = {};
-    
+
     codes.forEach((code: Code) => {
       const { extension } = code;
       if (extension) {
@@ -122,55 +121,55 @@ const GitHubCode: React.FC = () => {
   return (
     <Container maxWidth="md">
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-        <Typography variant="h4" sx={{ mb: 2 }}>GitHub Code Smells</Typography>
+        <Typography variant="h4" sx={{ mb: 2 }}>GitHub Code Scan</Typography>
 
         <form onSubmit={handleSubmit}>
-      <TextField
-        label="URL de GitHub"
-        variant="outlined"
-        fullWidth
-        value={url}
-        onChange={handleChange}
-        error={Boolean(error)}
-        helperText={error}
-      />
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-        Obtener datos
-      </Button>
-    </form>
+          <TextField
+            label="URL de GitHub"
+            variant="outlined"
+            fullWidth
+            value={url}
+            onChange={handleChange}
+            error={Boolean(error)}
+            helperText={error}
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+            Obtener datos
+          </Button>
+        </form>
 
-    {loading ? (
-      <Box mt={2}>
-        <CircularProgress size={100}/>
-      </Box>
-    ) : (
-      <React.Fragment>
-        <Box mt={2} width="100%" height={300}>
-          <ResponsiveContainer>
-            <PieChartComponent data={extensionData} />
-          </ResponsiveContainer>
-        </Box>
-
-        {codes.length > 0 && (
-          <Box mt={2} width="100%">
-            <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
-          </Box>
-        )}
-
-        {selectedCode && (
+        {loading ? (
           <Box mt={2}>
-            <CodeDetailsDialog
-              code={selectedCode}
-              openModal={openModal}
-              handleCloseModal={() => setOpenModal(false)}
-            />
+            <CircularProgress size={100} />
           </Box>
+        ) : (
+          <React.Fragment>
+            <Box mt={2} width="100%" height={300}>
+              <ResponsiveContainer>
+                <PieChartComponent data={extensionData} />
+              </ResponsiveContainer>
+            </Box>
+
+            {codes.length > 0 && (
+              <Box mt={2} width="100%">
+                <CodeList codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+              </Box>
+            )}
+
+            {selectedCode && (
+              <Box mt={2}>
+                <CodeDetailsDialog
+                  code={selectedCode}
+                  openModal={openModal}
+                  handleCloseModal={() => setOpenModal(false)}
+                />
+              </Box>
+            )}
+          </React.Fragment>
         )}
-      </React.Fragment>
-    )}
-  </Box>
-</Container>
-);
+      </Box>
+    </Container>
+  );
 };
 
 export default GitHubCode;

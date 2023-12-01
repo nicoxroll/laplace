@@ -11,20 +11,19 @@ interface IssueListProps {
   issues: Issue[];
   setSelectedIssue: (issue: Issue) => void;
   setOpenModal: (value: boolean) => void;
+  resetResponseArray: () => void; // Nueva prop para reiniciar responseArray
 }
 
 const BadSmell: React.FC<{ smell: string }> = ({ smell }) => {
   return <Chip label={smell} color="secondary" />;
 };
 
-const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpenModal }) => {
-  
-  
-  
+const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpenModal, resetResponseArray }) => {
   const handleIssueSubmit = async (event: React.FormEvent, issue: Issue) => {
     event.preventDefault();
     setSelectedIssue(issue);
     setOpenModal(true);
+    resetResponseArray(); // Reiniciar responseArray al abrir el modal
   };
 
   return (
@@ -44,11 +43,10 @@ const IssueList: React.FC<IssueListProps> = ({ issues, setSelectedIssue, setOpen
               <CardActions>
                 <form onSubmit={(event) => handleIssueSubmit(event, issue)}>
                   <Button size="small" color="primary" id="issue" type="submit">
-                    Ver detalles
+                    Ver detales
                   </Button>
                 </form>
               </CardActions>
-               
             </Card>
           </Box>
         </Grid>

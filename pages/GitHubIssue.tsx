@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography, Box, Container, Card, CardContent, CircularProgress, Chip } from '@mui/material';
+import { TextField, Button, Typography, Box, Container, CircularProgress } from '@mui/material';
 import IssueDetailsDialog from './IssueDetailsDialog';
+import CardIssue from './CardIssue';
 
 const GitHubIssue: React.FC = () => {
   const [url, setUrl] = useState('');
@@ -9,14 +10,14 @@ const GitHubIssue: React.FC = () => {
   const [issues, setIssues] = useState<any[]>([]);
   const [selectedIssue, setSelectedIssue] = useState<any | null>(null);
   const [openModal, setOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false); // Nuevo estado de carga
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (url.includes('github.com')) {
       setError('');
-      setLoading(true); // Activar la carga
+      setLoading(true);
 
       try {
         const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/issues';
@@ -28,7 +29,7 @@ const GitHubIssue: React.FC = () => {
         setError('Error al obtener los issues');
       }
 
-      setLoading(false); // Desactivar la carga después de recibir los resultados
+      setLoading(false);
     } else {
       setError('La URL debe ser de GitHub');
     }
@@ -43,6 +44,11 @@ const GitHubIssue: React.FC = () => {
       return text.slice(0, maxLength) + '...';
     }
     return text;
+  };
+
+  const handleClick = (issue: any) => {
+    setSelectedIssue(issue);
+    setOpenModal(true);
   };
 
   return (
@@ -72,38 +78,12 @@ const GitHubIssue: React.FC = () => {
         ) : issues.length > 0 ? (
           <Box mt={2}>
             {issues.map((issue: any, index: number) => (
-              <Card key={index} sx={{ width: '100%', mb: 2 }}>
-                <CardContent>
-                  <Typography variant="h6" component="div" sx={{ mb: 1 }}>
-                    {truncateText(issue.title, 50)}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-  {typeof issue.body === 'string' ? truncateText(issue.body, 140) : ''}
-</Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 1 }}>
-                    {issue.labels.map((label: any, labelIndex: number) => (
-                      <Chip
-                        key={labelIndex}
-                        label={label.name}
-                        color="primary"
-                        variant="outlined"
-                        sx={{ mr: 1, mb: 1 }}
-                      />
-                    ))}
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2 }}
-                    onClick={() => {
-                      setSelectedIssue(issue);
-                      setOpenModal(true);
-                    }}
-                  >
-                    Ver detalles
-                  </Button>
-                </CardContent>
-              </Card>
+              <CardIssue
+                key={index}
+                issue={issue}
+                truncateText={truncateText}
+                handleClick={handleClick}
+              />
             ))}
           </Box>
         ) : null}

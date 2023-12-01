@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
-import { InsertDriveFile, Code, Extension } from '@mui/icons-material';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { InsertDriveFile, Code } from '@mui/icons-material';
 import CodeDetailsDialog from './CodeDetailsDialog';
 
 interface Code {
   id: number;
   name: string;
   download_url: string;
+  size: number; // Agregar propiedad de tamaño
 }
 
 interface CodeListProps {
@@ -50,12 +51,16 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
   };
 
   const getIconByExtension = (name: string) => {
-
-    if (name.includes('package') || name.includes('requirements') || name.includes('pom.xml')|| name.includes('composer')) {
+    if (
+      name.includes('package') ||
+      name.includes('requirements') ||
+      name.includes('pom.xml') ||
+      name.includes('composer')
+    ) {
       return <InsertDriveFile />;
-    } else return <Code />;
-
-
+    } else {
+      return <Code />;
+    }
   };
 
   return (
@@ -71,6 +76,10 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
                 {code.name}
               </Typography>
               {getIconByExtension(code.name || '')}
+
+              <Typography variant="body2" color="text.secondary">
+                Size: {code.size}
+              </Typography>
             </CardContent>
           </Card>
         </Grid>
