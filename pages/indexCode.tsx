@@ -41,11 +41,11 @@ const GitHubCode: React.FC = () => {
 
         const filteredCodes: Code[] = [];
 
-        const processItems = async (items: Code[]) => {
+        const processItems = async (items: Code[], parentPath = '') => {
           for (const item of items) {
             if (
               item.download_url !== null &&
-              ! [
+              ![
                 '.scss', '.css', '.ico', '.jpg', '.avif', '.gitignore', '.mp4', '.mp3',
                 '.ttf', '.webm', '.jpeg', '.svg', '.woff', '.eot', '.png', '.gif', '.pdf',
                 '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar', '.tar',
@@ -54,9 +54,10 @@ const GitHubCode: React.FC = () => {
                 '.wav', '.ogg', '.flac', '.aac', '.example', '.htm', '.srt', '.sub', '.ass',
                 '.vtt', '.xample'
               ]
-              .some(extension => item.download_url!.endsWith(extension))
+                .some(extension => item.download_url!.endsWith(extension))
             ) {
-              filteredCodes.push(item);
+              const filePath = parentPath ? `${parentPath}/${item.name}` : item.name;
+              filteredCodes.push({ ...item, name: filePath });
             } else if (item.download_url === null) {
               const subUrl = item.url;
               const subResponse = await axios.get(subUrl);
@@ -64,8 +65,9 @@ const GitHubCode: React.FC = () => {
                 ...subItem,
                 extension: subItem.name.split('.').pop() || '',
               }));
-
-              await processItems(subApiData);
+        
+              const subPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+              await processItems(subApiData, subPath);
             }
           }
         };

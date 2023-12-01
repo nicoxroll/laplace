@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress } from '@mui/material';
 import BadSmells from '../BadSmells';
 
-
 interface CodeDetailsDialogProps {
   code: any;
   codeContent: any;
@@ -59,25 +58,22 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
       <DialogTitle>Detalles del Codigo</DialogTitle>
       <DialogContent>
         <Typography variant="h6" gutterBottom>
-          Título: {code.name}
+          {code.name}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Codigo:
-
           <pre style={{ whiteSpace: 'pre-wrap' }}>{codeContent}</pre>
-
         </Typography>
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:
         </Typography>
         {isLoading ? (
-           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-           <CircularProgress />
-         </div>
-        ) : (
-          <div style={{ marginTop: '10px' }}>
-            <BadSmells smells={responseArray} />
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+            <CircularProgress />
           </div>
+        ) : (
+          <>
+            {<BadSmells smells={responseArray}/>}
+          </>
         )}
         <div style={{ borderBottom: '1px solid #ccc', margin: '10px 0' }}></div> {/* Línea divisoria */}
         <Button onClick={handleCloseModal} color="primary" variant="contained" style={{ marginTop: '10px' }}>

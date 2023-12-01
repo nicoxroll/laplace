@@ -59,10 +59,10 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       <DialogTitle>Detalles del Issue</DialogTitle>
       <DialogContent>
         <Typography variant="h6" gutterBottom>
-          Título: {issue.title}
+          {issue.title}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Cuerpo del Issue: {issue.body}
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
         </Typography>
         <Typography variant="h6" gutterBottom>
           Respuesta de OpenAI:

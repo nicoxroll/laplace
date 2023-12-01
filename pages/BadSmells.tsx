@@ -33,7 +33,8 @@ const BadSmells: React.FC<BadSmellsProps> = ({ smells }) => {
         <DialogTitle>Información Detallada</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body1" style={{ margin: '4px' }}>
-            {selectedSmell}
+          <pre style={{ whiteSpace: 'pre-wrap' }}> {selectedSmell}</pre>
+           
           </Typography>
         </DialogContent>
         <DialogActions>

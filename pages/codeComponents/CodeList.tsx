@@ -67,7 +67,7 @@ const CodeList: React.FC<CodeListProps> = ({ codes, apiUrl }) => {
             onClick={() => handleCodeClick(code)}
           >
             <CardContent>
-              <Typography variant="h5" gutterBottom>
+              <Typography variant="body2" color="text.secondary">
                 {code.name}
               </Typography>
               {getIconByExtension(code.name || '')}

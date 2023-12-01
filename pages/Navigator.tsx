@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useRouter } from 'next/router';
 import Divider from '@mui/material/Divider';
 import Drawer, { DrawerProps } from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -19,8 +19,8 @@ const categories = [
   {
     id: 'Build',
     children: [
-      { id: 'Issues', icon: <DnsRoundedIcon />, route: '/indexIssue' },
-      { id: 'Code', icon: <PermMediaOutlinedIcon />, route: '/indexCode' },
+      { id: 'Issues', icon: <DnsRoundedIcon />, route: '/Paperbase' },
+      { id: 'Code', icon: <PermMediaOutlinedIcon />, route: '/Paperbase2' },
     ],
   },
   {
@@ -50,6 +50,11 @@ const itemCategory = {
 
 export default function Navigator(props: DrawerProps) {
   const { ...other } = props;
+  const router = useRouter();
+
+  const navigateToRoute = (route: string) => {
+    router.push(route);
+  };
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -57,7 +62,7 @@ export default function Navigator(props: DrawerProps) {
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
           Paperbase
         </ListItem>
-        <ListItem sx={{ ...item, ...itemCategory }}>
+        <ListItem sx={{ ...item, ...itemCategory }} onClick={() => navigateToRoute('/')}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
@@ -68,9 +73,9 @@ export default function Navigator(props: DrawerProps) {
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+            {children.map(({ id: childId, icon, route }) => (
+              <ListItem disablePadding key={childId} onClick={() => navigateToRoute(route)}>
+                <ListItemButton selected={router.pathname === route} sx={item}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
