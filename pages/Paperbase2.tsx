@@ -176,7 +176,7 @@ export default function Paperbase() {
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
-              open={mobileOpen}
+              open={false}
               onClose={handleDrawerToggle}
             />
           )}

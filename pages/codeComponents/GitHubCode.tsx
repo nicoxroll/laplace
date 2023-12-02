@@ -144,7 +144,7 @@ const GitHubCode: React.FC = () => {
           </Box>
         ) : (
           <React.Fragment>
-            <Box mt={2} width="100%" height={300}>
+            <Box mt={2} width="100%" height={270}>
               <ResponsiveContainer>
                 <PieChartComponent data={extensionData} />
               </ResponsiveContainer>

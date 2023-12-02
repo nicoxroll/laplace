@@ -40,13 +40,23 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
 
       const codeContent = await response.text();
 
-
       setSelectedCodeContent(codeContent);
-
       setSelectedCode(code);
       setOpenModal(true);
     } catch (error) {
       console.error('Error al obtener los detalles del problema:', error);
+    }
+  };
+
+  const formatSize = (size: number) => {
+    if (size < 1024) {
+      return size + ' B';
+    } else if (size < 1024 * 1024) {
+      const kbSize = (size / 1024).toFixed(2);
+      return kbSize + ' KB';
+    } else {
+      const mbSize = (size / (1024 * 1024)).toFixed(2);
+      return mbSize + ' MB';
     }
   };
 
@@ -76,9 +86,8 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
                 {code.name}
               </Typography>
               {getIconByExtension(code.name || '')}
-
               <Typography variant="body2" color="text.secondary">
-                Size: {code.size}
+                Size: {formatSize(code.size)}
               </Typography>
             </CardContent>
           </Card>

@@ -13,17 +13,17 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
   const [response, setResponse] = useState<string>('');
   const [responseArray, setResponseArray] = useState<string[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const initializeVariables = () => {
     setResponseArray([]);
-    setImageUrl(null);
+    setImageUrls([]);
   };
 
   useEffect(() => {
     if (openModal) {
       initializeVariables();
-      extractImageUrl();
+      extractImageUrls();
     }
   }, [openModal]);
 
@@ -34,11 +34,11 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
     } 
   }, [response]);
 
-  const extractImageUrl = () => {
-    const regex = /\bhttps?:\/\/\S+\b/;
-    const match = issue.body.match(regex);
-    if (match && match.length > 0) {
-      setImageUrl(match[0]);
+  const extractImageUrls = () => {
+    const regex = /\bhttps?:\/\/\S+\b/g;
+    const matches = issue.body.match(regex);
+    if (matches && matches.length > 0) {
+      setImageUrls(matches);
     }
   };
 
@@ -81,9 +81,9 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
           </Typography>
-          {imageUrl && (
-            <img src={imageUrl} alt="Issue Image" style={{ maxWidth: '100%', marginTop: '10px' }} />
-          )}
+          {imageUrls.map((imageUrl, index) => (
+            <img key={index} src={imageUrl} alt={`Issue Image ${index}`} style={{ maxWidth: '100%', marginTop: '10px' }} />
+          ))}
         </div>
 
         {isLoading && (

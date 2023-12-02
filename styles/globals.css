@@ -1,0 +1,38 @@
+/* globals.css */
+
+/* Estilos para el tema claro */
+body {
+    background-color: #f5f5fd;
+    color: #333;
+  }
+  
+  .container {
+    background-color: #eaf2fc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+  }
+  
+  .button {
+    background-color: #c1dfff;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Estilos para el tema oscuro */
+  body.dark-mode {
+    background-color: #222;
+    color: #fff;
+  }
+  
+  .container.dark-mode {
+    background-color: #1a1a1a;
+  }
+  
+  .button.dark-mode {
+    background-color: #004466;
+    color: #fff;
+  }
