@@ -15,6 +15,16 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
   const [responseArray, setResponseArray] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const initializeVariables = () => {
+    setResponse('');
+    setResponseArray([]);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    initializeVariables();
+  }, [codeContent]);
+
   useEffect(() => {
     if (response) {
       const array = response.split('-*- ');
@@ -24,7 +34,7 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
 
   async function fetchOpenAIResponse() {
     try {
-      setResponseArray([]);
+      initializeVariables();
       setIsLoading(true); // Iniciar el estado de carga
 
       const openAIResponse = await fetchOpenAI();
@@ -60,8 +70,6 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{codeContent}</pre>
           </Typography>
-
-          
         </div>
 
         {isLoading && (

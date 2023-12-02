@@ -9,21 +9,38 @@ interface IssueDetailsDialogProps {
   handleCloseModal: () => void;
 }
 
-const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModal, handleCloseModal}) => {
+const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModal, handleCloseModal }) => {
   const [response, setResponse] = useState<string>('');
   const [responseArray, setResponseArray] = useState<string[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+  const initializeVariables = () => {
+    setResponseArray([]);
+    setImageUrl(null);
+  };
 
+  useEffect(() => {
+    if (openModal) {
+      initializeVariables();
+      extractImageUrl();
+    }
+  }, [openModal]);
 
   useEffect(() => {
     if (response) {
       const array = response.toString().split(',');
       setResponseArray(array);
-    } else {
-      setResponseArray([]);
-    }
+    } 
   }, [response]);
+
+  const extractImageUrl = () => {
+    const regex = /\bhttps?:\/\/\S+\b/;
+    const match = issue.body.match(regex);
+    if (match && match.length > 0) {
+      setImageUrl(match[0]);
+    }
+  };
 
   async function fetchOpenAI() {
     const content = issue.title + ' --- ' + issue.body;
@@ -34,14 +51,14 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       },
       body: JSON.stringify({ issue: content }),
     });
-    console.log(content)
+    console.log(content);
     const data = await response.json();
     return data.result;
   }
 
   const handleAnalyzeClick = async () => {
     try {
-      setResponseArray([]);
+      setResponseArray([])
       setLoading(true);
       const openAIResponse = await fetchOpenAI();
       setResponse(openAIResponse);
@@ -64,6 +81,9 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
           </Typography>
+          {imageUrl && (
+            <img src={imageUrl} alt="Issue Image" style={{ maxWidth: '100%', marginTop: '10px' }} />
+          )}
         </div>
 
         {isLoading && (
@@ -74,7 +94,13 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
         <BadSmells smells={responseArray} />
 
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-          <Button onClick={handleAnalyzeClick} color="primary" variant="contained" startIcon={<Search />} style={{ marginRight: '10px' }}>
+          <Button
+            onClick={handleAnalyzeClick}
+            color="primary"
+            variant="contained"
+            startIcon={<Search />}
+            style={{ marginRight: '10px' }}
+          >
             Analizar
           </Button>
           <Button onClick={handleCloseModal} color="primary" variant="contained" style={{ backgroundColor: '#003366' }}>
