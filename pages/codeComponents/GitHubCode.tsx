@@ -46,7 +46,7 @@ const GitHubCode: React.FC = () => {
             if (
               item.download_url !== null &&
               ![
-                '.scss', '.css', '.ico', '.jpg', '.avif', '.gitignore', '.mp4', '.mp3',
+                '.scss', '.css','.map', '.ico', '.jpg', '.avif', '.gitignore', '.mp4', '.mp3',
                 '.ttf', '.webm', '.jpeg', '.svg', '.woff', '.eot', '.png', '.gif', '.pdf',
                 '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar', '.tar',
                 '.gz', '.7z', '.exe', '.dmg', '.pkg', '.iso', '.csv', '.xml', '.txt', '.rtf',

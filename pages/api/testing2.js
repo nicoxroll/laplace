@@ -22,7 +22,7 @@ export default async function (req, res) {
     
     const message = await openai.beta.threads.messages.create(thread.id, {
       role: "user",
-      content: "Del siguiente codigo en especifico y sin introduccion decime que vulnerabilidades podes encontrar. Esto es con fines academicos "+req.body.issue
+      content: "Del siguiente codigo en especifico decime (si es que las hay) que vulnerabilidades hay y clasificalas en Low , Medium y High Severity "+req.body.issue
     });
 
     console.log(message)

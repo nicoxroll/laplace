@@ -86,7 +86,11 @@ const GitHubIssue: React.FC = () => {
               />
             ))}
           </Box>
-        ) : null}
+        ) : (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
+            <img src="icon.png" alt="Icon" />
+          </Box>
+        )}
 
         {selectedIssue && (
           <Box mt={2}>
