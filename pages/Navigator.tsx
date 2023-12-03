@@ -9,26 +9,26 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
-import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
+import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 
-import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 
 const categories = [
   {
-    id: 'Build',
+    id: 'Scan',
     children: [
       { id: 'Issues', icon: <DnsRoundedIcon />, route: '/Paperbase' },
-      { id: 'Code', icon: <PermMediaOutlinedIcon />, route: '/Paperbase2' },
+      { id: 'Code', icon: <CodeRoundedIcon />, route: '/Paperbase2' },
+      
     ],
   },
   {
-    id: 'Quality',
+    id: 'Configuration',
     children: [
-      { id: 'Analytics', icon: <SettingsIcon /> },
-      { id: 'Performance', icon: <TimerIcon /> },
-      { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
+      { id: 'Chat', icon: <PhonelinkSetupIcon />, route: '/Paperbase3' },
+      { id: 'Agentes', icon: <SettingsIcon />, route: '/Paperbase4' },
+
     ],
   },
 ];

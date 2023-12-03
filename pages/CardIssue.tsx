@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Chip, Button } from '@mui/material';
+import { Card, CardContent, Typography, Box, Chip, Button, CardActionArea } from '@mui/material';
+
 
 interface CardIssueProps {
   issue: any;
@@ -11,6 +12,7 @@ interface CardIssueProps {
 const CardIssue: React.FC<CardIssueProps> = ({ issue, truncateText, handleClick}) => {
   return (
     <Card sx={{ width: '100%', mb: 2 }}>
+      <CardActionArea>
       <CardContent>
         <Typography variant="h6" component="div" sx={{ mb: 1 }}>
           {truncateText(issue.title, 50)}
@@ -38,6 +40,7 @@ const CardIssue: React.FC<CardIssueProps> = ({ issue, truncateText, handleClick}
           Ver detalles
         </Button>
       </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

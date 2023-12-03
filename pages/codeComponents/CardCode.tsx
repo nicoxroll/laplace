@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, CardActionArea } from '@mui/material';
 import { InsertDriveFile, Code } from '@mui/icons-material';
 import CodeDetailsDialog from './CodeDetailsDialog';
 
@@ -81,6 +81,7 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
             sx={{ height: '100%', cursor: 'pointer' }}
             onClick={() => handleCodeClick(code)}
           >
+            <CardActionArea>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
                 {code.name}
@@ -90,6 +91,7 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
                 Size: {formatSize(code.size)}
               </Typography>
             </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
       ))}
