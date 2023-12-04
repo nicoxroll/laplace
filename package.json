@@ -13,6 +13,7 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@types/node": "^20.9.1",
+    "ai": "^2.2.27",
     "axios": "^1.6.2",
     "fs": "^0.0.1-security",
     "mui": "^0.0.1",

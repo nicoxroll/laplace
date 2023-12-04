@@ -144,17 +144,22 @@ const GitHubCode: React.FC = () => {
           </Box>
         ) : (
           <React.Fragment>
-            <Box mt={2} width="100%" height={270}>
-              <ResponsiveContainer>
-                <PieChartComponent data={extensionData} />
-              </ResponsiveContainer>
-            </Box>
+           
 
             {codes.length > 0 && (
+              
               <Box mt={2} width="100%">
+                <PieChartComponent data={extensionData} />
                 <CardCode codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
               </Box>
-            )}
+            )}  
+              {codes.length === 0 ? (
+  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
+    <img src="codes.png" alt="Icon" width="40%"  />
+  </Box>
+) : null}
+            
+    
 
             {selectedCode && (
               <Box mt={2}>

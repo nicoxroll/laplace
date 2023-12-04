@@ -11,6 +11,18 @@ import Header from './Header';
 import GitHubCode from './codeComponents/GitHubCode';
 
 
+function Copyright() {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}.
+    </Typography>
+  );
+}
+
 let theme = createTheme({
   palette: {
     primary: {
@@ -190,8 +202,11 @@ export default function Paperbase() {
           <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
             <GitHubCode />
           </Box>
+          <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
+            <Copyright />
+          </Box>
         </Box>
-      </Box>
+        </Box>
     </ThemeProvider>
   );
 }
