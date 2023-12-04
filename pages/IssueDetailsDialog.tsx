@@ -36,11 +36,9 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
 
   const extractImageUrls = () => {
     const regex = /\bhttps?:\/\/\S+\b/g;
-    const imageRegex = /\.(jpg|jpeg|png|gif|bmp)$/i; // Expresión regular para verificar el formato de imagen
     const matches = issue.body.match(regex);
     if (matches && matches.length > 0) {
-      const imageUrls = matches.filter((url) => imageRegex.test(url));
-      setImageUrls(imageUrls);
+      setImageUrls(matches);
     }
   };
 
@@ -77,11 +75,9 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       <DialogTitle>Detalles del Issue</DialogTitle>
       <DialogContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ overflowY: 'auto', flexGrow: 1 }}>
-        <Typography variant="h6" gutterBottom>
-      <a href={issue.html_url} target="_blank" rel="noopener noreferrer">
-        {issue.title}
-      </a>
-    </Typography>
+          <Typography variant="h6" gutterBottom>
+            {issue.title}
+          </Typography>
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
           </Typography>
