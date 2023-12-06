@@ -97,6 +97,7 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       href={imageUrl}
       target="_blank"
       rel="noopener noreferrer"
+      clickable
       label={imageUrl}
       style={{ marginTop: '10px', backgroundColor: 'violet', color: 'white' }}
     />
