@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress, Box } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress, Box, Chip } from '@mui/material';
 import BadSmells from './BadSmells';
 import { Search } from '@mui/icons-material';
 
@@ -33,12 +33,15 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       setResponseArray(array);
     } 
   }, [response]);
-
   const extractImageUrls = () => {
-    const regex = /\bhttps?:\/\/\S+\b/g;
-    const matches = issue.body.match(regex);
-    if (matches && matches.length > 0) {
-      setImageUrls(matches);
+    if (issue.body && issue.body.trim() !== '') {
+      const regex = /\bhttps?:\/\/\S+\b/g;
+      const matches = issue.body.match(regex);
+      if (matches && matches.length > 0) {
+        setImageUrls(matches);
+      }
+    } else {
+      console.log('El campo "body" está vacío');
     }
   };
 
@@ -75,15 +78,30 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       <DialogTitle>Detalles del Issue</DialogTitle>
       <DialogContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ overflowY: 'auto', flexGrow: 1 }}>
-          <Typography variant="h6" gutterBottom>
-            {issue.title}
-          </Typography>
+        <a href={issue.html_url} target="_blank" rel="noopener noreferrer">
+  <Typography variant="h6" gutterBottom>
+    {issue.title}
+  </Typography>
+</a>
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{issue.body}</pre>
           </Typography>
-          {imageUrls.map((imageUrl, index) => (
-            <img key={index} src={imageUrl} alt={`Issue Image ${index}`} style={{ maxWidth: '100%', marginTop: '10px' }} />
-          ))}
+          {imageUrls.map((imageUrl, index) => {
+  const isImage = /\.(jpeg|jpg|gif|png)$/.test(imageUrl) || imageUrl.includes('asset');
+  return isImage ? (
+    <img key={index} src={imageUrl} alt={`Issue ${index}`} style={{ maxWidth: '100%', marginTop: '10px' }} />
+  ) :  (
+    <Chip
+      key={index}
+      component="a"
+      href={imageUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      label={imageUrl}
+      style={{ marginTop: '10px', backgroundColor: 'violet', color: 'white' }}
+    />
+  );
+})}
         </div>
 
         {isLoading && (
