@@ -4,33 +4,16 @@ import { TavilySearchAPIRetriever } from "langchain/retrievers/tavily_search_api
 
 const openai = new OpenAI();
 const retriever = new TavilySearchAPIRetriever({
-	k: 3,
+	k: 2,
   });
 
 global.tavily_search=tavily_search;
 
 export default async function (req, res) {
 	try {
-		const assistant_prompt_instruction = "You are a engineer cibersecurity expert. Your goal is to provide answers based on information from the internet. You must use the provided Tavily search API function to find relevant online information. You should never use your own knowledge to answer questions. Please include relevant url sources at the end of your answers.";
 
-		const assistant = await openai.beta.assistants.create({
-			instructions: assistant_prompt_instruction,
-			model: "gpt-3.5-turbo",
-			tools: [{
-				type: "function",
-				function: {
-					name: "tavily_search",
-					description: "Get information on recent events from the web related with the code.",
-					parameters: {
-						type: "object",
-						properties: {
-							query: { type: "string", description: "'Latest news on vulnerabilities'" },
-						},
-						required: ["query"]
-					}
-				}
-			}]
-		});
+
+		const assistant = await openai.beta.assistants.retrieve(process.env.ASSISTANT_SEARCH_API);
 		console.log("creando Thread")
 		const thread = await openai.beta.threads.create();
 		console.log(thread.id)
@@ -39,7 +22,7 @@ export default async function (req, res) {
 		console.log("creando Mensaje")
 		const message = await openai.beta.threads.messages.create(thread.id, {
 			role: "user",
-			content: "Del siguiente texto busca en internet articulos relacionados " + req.body.issue
+			content: "Busca en internet articulos relacionados con: " + req.body.issue
 		});
 
 		console.log(message);
@@ -69,7 +52,7 @@ export default async function (req, res) {
 			for (const toolCall of toolCalls) {
 			  const functionName = toolCall.function.name;
 		  
-			  console.log(`This question requires us to call a function: ${functionName}`);
+			  console.log(`Se requiere la funcion: ${functionName}`);
 		  
 			  const args = JSON.parse(toolCall.function.arguments);
 		  

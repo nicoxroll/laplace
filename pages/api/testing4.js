@@ -14,6 +14,26 @@ app.use(express.json());
 app.post('/assistant', async (req, res) => {
     try {
         // Crear un asistente
+
+        const assistant2 = await openai.beta.assistants.create({
+          instructions: assistant_prompt_instruction,
+          model: "gpt-3.5-turbo",
+          tools: [{
+            type: "function",
+            function: {
+              name: "tavily_search",
+              description: "Get information on recent events from the web related with the code.",
+              parameters: {
+                type: "object",
+                properties: {
+                  query: { type: "string", description: "'Latest news on vulnerabilities'" },
+                },
+                required: ["query"]
+              }
+            }
+          }]
+        });
+        console.log(assistant2)
 const assistant = await client.beta.assistants.create({
     instructions: assistant_prompt_instruction,
     model: "gpt-3-1106-preview",

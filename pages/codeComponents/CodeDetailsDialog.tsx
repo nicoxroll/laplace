@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress, Box } from '@mui/material';
-import BadSmells from '../BadSmells';
 import { Search } from '@mui/icons-material';
+import CodeScan from './CodeSearch'
 
 interface CodeDetailsDialogProps {
   code: any;
@@ -48,7 +48,7 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
   }
 
   async function fetchOpenAI() {
-    const response = await fetch('/api/testing3', {
+    const response = await fetch('/api/testing2', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
             <CircularProgress />
           </div>
         )}
-        <BadSmells smells={responseArray} />
+        <CodeScan smells={responseArray} />
 
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
           <Button onClick={fetchOpenAIResponse} color="primary" variant="contained" startIcon={<Search />} style={{ marginRight: '10px' }}>
