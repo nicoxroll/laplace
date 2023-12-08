@@ -48,7 +48,7 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
   }
 
   async function fetchOpenAI() {
-    const response = await fetch('/api/testing2', {
+    const response = await fetch('/api/testing3', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

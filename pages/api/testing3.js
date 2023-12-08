@@ -1,169 +1,148 @@
-import {  OpenAI } from "openai";
+import { OpenAI } from "openai";
+import { TavilySearchAPIRetriever } from "langchain/retrievers/tavily_search_api";
+
 
 const openai = new OpenAI();
+const retriever = new TavilySearchAPIRetriever({
+	k: 3,
+  });
+
+global.tavily_search=tavily_search;
 
 export default async function (req, res) {
- 
-
-	const issue = req.body.issue || '';
-	if (issue.trim().length === 0) {
-		res.status(400).json({
-			error: {
-				message: "Please enter a valid Code",
-			}
-		});
-		return;
-	}
-
 	try {
-		const assistant = await client.beta.assistants.create({
+		const assistant_prompt_instruction = "You are a engineer cibersecurity expert. Your goal is to provide answers based on information from the internet. You must use the provided Tavily search API function to find relevant online information. You should never use your own knowledge to answer questions. Please include relevant url sources at the end of your answers.";
+
+		const assistant = await openai.beta.assistants.create({
 			instructions: assistant_prompt_instruction,
-			model: "gpt-3-1106-preview",
+			model: "gpt-3.5-turbo",
 			tools: [{
-					type: "function",
-					function: {
-							name: "tavily_search",
-							description: "Obtener información sobre eventos recientes en la web.",
-							parameters: {
-									type: "object",
-									properties: {
-											query: { type: "string", description: "'Últimas noticias sobre vulnerabilidades relacionadas'" },
-									},
-									required: ["query"]
-							}
+				type: "function",
+				function: {
+					name: "tavily_search",
+					description: "Get information on recent events from the web related with the code.",
+					parameters: {
+						type: "object",
+						properties: {
+							query: { type: "string", description: "'Latest news on vulnerabilities'" },
+						},
+						required: ["query"]
 					}
+				}
 			}]
-	});
-	
-	const thread = await openai.beta.threads.create();
-    
-	const message = await openai.beta.threads.messages.create(thread.id, {
-		role: "user",
-		content: "Del siguiente codigo en especifico decime que vulnerabilidades se podria explotar, clasificalas en severidad Low, Medium, High y ademas con su CVE o CWE correspondiente: "+req.body.issue
-	});
+		});
+		console.log("creando Thread")
+		const thread = await openai.beta.threads.create();
+		console.log(thread.id)
 
-	console.log(message)
-	
-	const run = await openai.beta.threads.runs.create(thread.id, {
-	assistant_id: assistant.id,
-	})
-	
-		 let runStatus;
-		 do {
-			 await sleep(1000);
-			 runStatus=await getStatus(threadId,runResponse.id)
-			 
-		 } while (!['completed', 'failed', 'requires_action'].includes(runStatus.status));
-	
 		
-		 if(runStatus.status ==='failed'){
-				 console.error(runStatus.error);
-				 return res.status(500).json({ error:'Error en la ejecucion'});
-		 
-		 }
-		
-		
-		if (runStatus.status==='requires_action') {
-	
-					const toolOutputArray=[];
-					
-					for(const tool of run.required_action.submit_tool_outputs.tool_calls){
-							
-							let output=null;
-							const toolCallId=tool.id;
-							const functionName=tool.function.name;
-							const functionArgs=tool.function.arguments;
-	
-							 if (functionName === 'tavily_search') {
-									output = await tavilySearch(JSON.parse(functionArgs).query);
-							 }
-	
-								if(output){
-									 toolOutputArray.push({ tool_call_id: toolCallId, output });
-								}
-					}
-	
-				 runStatus=await client.beta.threads.runs.submitToolOutputs({
-						 thread_id:'thread.id',
-						 run_id:runResponse.id,
-						 tool_outputs:[
-								 ...toolOutputArray
-						 ]
-				 });
-				 
-				do {
-					 await sleep(1000);
-					 runStatus=await getStatus(threadId,runResponse.id)
-					 
-					} while (!['completed', 'failed'].includes(runStatus.status));
-	
-		 
-		 }
-		
+		console.log("creando Mensaje")
+		const message = await openai.beta.threads.messages.create(thread.id, {
+			role: "user",
+			content: "Del siguiente texto busca en internet articulos relacionados " + req.body.issue
+		});
+
+		console.log(message);
+
+		console.log("creando Run")
+		const run = await openai.beta.threads.runs.create(thread.id, {
+			assistant_id: assistant.id,
+		});
+
+		console.log(run)
+
+		let runStatus;
+		do {
+			await sleep(1000);
+			runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+		} while (!['completed', 'failed', 'requires_action'].includes(runStatus.status));
+
+		if (runStatus.status === 'failed') {
+			console.error(runStatus.error);
+			return res.status(500).json({ error: 'Error en la ejecución' });
+		}
+
+		if (runStatus.status === "requires_action") {
+			const toolCalls = runStatus.required_action.submit_tool_outputs.tool_calls;
+			const toolOutputs = [];
+		  
+			for (const toolCall of toolCalls) {
+			  const functionName = toolCall.function.name;
+		  
+			  console.log(`This question requires us to call a function: ${functionName}`);
+		  
+			  const args = JSON.parse(toolCall.function.arguments);
+		  
+			  const argsArray = Object.keys(args).map((key) => args[key]);
+		  
+			  // Dynamically call the function with arguments
+			  const output = await global[functionName].apply(null, argsArray);
+		  
+			  toolOutputs.push({
+				tool_call_id: toolCall.id,
+				output: output,
+			  });
+			}
+		  
+			// Submit tool outputs
+			await openai.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
+			  tool_outputs: toolOutputs,
+			});
+		  
+
+			do {
+				await sleep(1000);
+				runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+			} while (!['completed', 'failed'].includes(runStatus.status));
+		}
+
 		// Obtener mensajes del hilo
-		 const messages = await getMessages(thread.id);
-		
+		const messages =  await openai.beta.threads.messages.list( thread.id );
+		console.log(messages);
 
- 
-
-		 const response = await openai.beta.threads.messages.retrieve(
+		const response = await openai.beta.threads.messages.retrieve(
 			thread.id,
 			messages.body.first_id
 		);
-		console.log(response)
-		const aux = await response.content[0].text.value
-		console.log(aux)
+
+		console.log(response);
+		const aux = await response.content[0].text.value;
+		console.log(aux);
 		// Mostrar la respuesta en un alert
 		res.json({ result: aux });
-		
-		
-		 // Función para esperar un cierto tiempo en milisegundos
-		 function sleep(ms) {
-			return new Promise(resolve => setTimeout(resolve, ms));
-		}
-		
-		// Función para realizar una búsqueda con Tavily
-		async function tavilySearch(query) {
-			const searchResult = await tavily_client.get_search_context(query, { search_depth:"advanced", max_tokens:8000});
-			return searchResult;
-		}
-		
-		// Función para obtener el estado de ejecución de un hilo y ejecución específicos
-		
-		async function getStatus(threadId,runId){
-				
-				 const run = await client.beta.threads.runs.retrieve({ thread_id:threadId , run_id:runId});
-				 console.log(`Estado actual de la ejecucion:${run.status}`);
-				 return run;
-		
-		}
-		
-		// Función para obtener los mensajes de un hilo específico
-		
-		async function getMessages(threadId){
-		
-		const messages=await client.beta.threads.messages.list({
-						thread_id: thread.id,
-						
-		})
-		return messages;
-		
-		}
-		
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Error interno del servidor' });
+	}
+}
 
+// Función para esperar un cierto tiempo en milisegundos
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+// Función para realizar una búsqueda con Tavily
+async function tavily_search(query) {
+	const retriever = new TavilySearchAPIRetriever({
+	  k: 3,
+	});
+  
+	const searchResult = await retriever.getRelevantDocuments(query);
+	console.log({ searchResult });
+  
+	return JSON.stringify(searchResult);
+  }
 
+// Función para obtener el estado de ejecución de un hilo y ejecución específicos
+async function getStatus(threadId, runId) {
+	const run = await openai.beta.threads.runs.retrieve({ threadId, runId });
+	console.log(`Estado actual de la ejecución: ${run.status}`);
+	return run;
+}
 
-
-
-
-			} catch (error) {
-			console.error(error);
-			res.status(500).json({ error: 'Error interno del servidor' });
-		}
-	};
-	
-
-
-	
-
+// Función para obtener los mensajes de un hilo específico
+async function getMessages(threadId) {
+	console.log("Listado de Mensajes: ")
+	const messages = await openai.beta.threads.messages.list({ threadId });
+	return messages;
+}
