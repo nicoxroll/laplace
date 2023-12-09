@@ -47,7 +47,7 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
 
   async function fetchOpenAI() {
     const content = issue.title + ' --- ' + issue.body;
-    const response = await fetch('/api/testing', {
+    const response = await fetch('/api/agentSmell', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
