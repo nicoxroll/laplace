@@ -22,7 +22,7 @@ export default async function (req, res) {
     
     const message = await openai.beta.threads.messages.create(thread.id, {
       role: "user",
-      content: "Del siguiente texto dame 2 como respuesta sin ningun tipo de introduccion los Badsmells de UX/UI que detectas separados por coma del estilo BadSmell1, BadSmell2, BadSmell3. Tenes que compararlo con la base de conocimiento que te proporcione y decirme de cual es: "+req.body.issue
+      content: "Analiza y determina que BadSmell de UX/UI que hagan referencia a alguno de tu base de conocimiento, dame una lista de los que conoces en el que se parecen con el texto: "+req.body.issue
     });
 
     console.log(message)
