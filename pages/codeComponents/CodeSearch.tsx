@@ -38,7 +38,7 @@ const CodeSearch = ({ smells }) => {
   };
 
   const fetchOpenAI = async (codeContent) => {
-    const response = await fetch('/api/testing3', {
+    const response = await fetch('/api/agentSearch', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

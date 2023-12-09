@@ -18,16 +18,16 @@ const categories = [
   {
     id: 'Scan',
     children: [
-      { id: 'Issues', icon: <DnsRoundedIcon />, route: '/Paperbase' },
-      { id: 'Code', icon: <CodeRoundedIcon />, route: '/Paperbase2' },
+      { id: 'Issues', icon: <DnsRoundedIcon />, route: '/IssuePage' },
+      { id: 'Code', icon: <CodeRoundedIcon />, route: '/CodePage' },
       
     ],
   },
   {
     id: 'Configuration',
     children: [
-      { id: 'Chat', icon: <PhonelinkSetupIcon />, route: '/Paperbase3' },
-      { id: 'Agentes', icon: <SettingsIcon />, route: '/Paperbase4' },
+      { id: 'Chat', icon: <PhonelinkSetupIcon />, route: '/ChatPage' },
+      { id: 'Agentes', icon: <SettingsIcon />, route: '/AssistantsPage' },
 
     ],
   },
