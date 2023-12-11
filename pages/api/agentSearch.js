@@ -22,7 +22,7 @@ export default async function (req, res) {
 		console.log("creando Mensaje")
 		const message = await openai.beta.threads.messages.create(thread.id, {
 			role: "user",
-			content: "Busca en internet articulos relacionados con: " + req.body.issue
+			content: "Busca en internet articulos que solamente hablen de algo relacionado con el siguiente texto: " + req.body.issue
 		});
 
 		console.log(message);
