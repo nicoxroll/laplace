@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress, Box, Chip } from '@mui/material';
 import BadSmells from './BadSmells';
 import { Search } from '@mui/icons-material';
+import CodeSearch from './codeComponents/CodeSearch';
 
 interface IssueDetailsDialogProps {
   issue: any;
@@ -29,7 +30,7 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
 
   useEffect(() => {
     if (response) {
-      const array = response.toString().split(',');
+      const array = response.toString().split('--,*');
       setResponseArray(array);
     } 
   }, [response]);
@@ -110,7 +111,7 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
             <CircularProgress />
           </div>
         )}
-        <BadSmells smells={responseArray} />
+        <CodeSearch smells={responseArray} />
 
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
           <Button

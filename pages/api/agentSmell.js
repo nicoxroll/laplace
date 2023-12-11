@@ -22,7 +22,7 @@ export default async function (req, res) {
     
     const message = await openai.beta.threads.messages.create(thread.id, {
       role: "user",
-      content: "Analiza y determina que BadSmell de UX/UI que hagan referencia a alguno de tu base de conocimiento, dame una lista de los que conoces en el que se parecen con el texto: "+req.body.issue
+      content: "Primero resume el texto para darme contexto. Una vez que tenes el resumen determina que BadSmell de UX/UI que hagan referencia a alguno de tu base de conocimiento, dame una lista de los que hacen referencia. Si no estan dime a que otro se podria referir para agregar al catalogo: "+req.body.issue
     });
 
     console.log(message)
