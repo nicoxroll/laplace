@@ -8,10 +8,9 @@ interface CodeDetailsDialogProps {
   codeContent: any;
   openModal: boolean;
   handleCloseModal: () => void;
-  codeResponses: string[]
 }
 
-const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent, openModal, handleCloseModal,  }) => {
+const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent, openModal, handleCloseModal }) => {
   const [response, setResponse] = useState<string>('');
   const [responseArray, setResponseArray] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -7,19 +7,19 @@ interface Code {
   id: number;
   name: string;
   download_url: string;
-  size: number; // Agregar propiedad de tamaño
+  size: number; 
 }
 
 interface CardCodeProps {
   codes: Code[];
-  apiUrl: string;
+  setSelectedCode: React.Dispatch<React.SetStateAction<Code | null>>;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
+const CardCode: React.FC<CardCodeProps> = ({ codes }) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [selectedCodeContent, setSelectedCodeContent] = useState<string>('');
-  const [codeResponses, setCodeResponses] = useState<string[]>([]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -61,12 +61,9 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
   };
 
   const getIconByExtension = (name: string) => {
-    if (
-      name.includes('package') ||
-      name.includes('requirements') ||
-      name.includes('pom.xml') ||
-      name.includes('composer')
-    ) {
+    const fileExtension = name.split('.').pop()?.toLowerCase();
+  
+    if (fileExtension?.match(/(package|requirements|pom\.xml|composer)$/)) {
       return <InsertDriveFile />;
     } else {
       return <Code />;
@@ -101,7 +98,6 @@ const CardCode: React.FC<CardCodeProps> = ({ codes, apiUrl }) => {
           codeContent={selectedCodeContent}
           openModal={openModal}
           handleCloseModal={handleCloseModal}
-          codeResponses={codeResponses}
         />
       )}
     </Grid>

@@ -7,6 +7,7 @@ import { ResponsiveContainer } from 'recharts';
 import PieChartComponent from '../PieChartComponent';
 
 interface Code {
+  id: number,
   name: string;
   url: string;
   download_url: string | null;
@@ -167,6 +168,7 @@ const GitHubCode: React.FC = () => {
                   code={selectedCode}
                   openModal={openModal}
                   handleCloseModal={() => setOpenModal(false)}
+                  codeContent={'code'}
                 />
               </Box>
             )}
