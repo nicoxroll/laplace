@@ -20,7 +20,7 @@ const BadSmells: React.FC<BadSmellsProps> = ({ smells }) => {
 
   return (
     <div>
-      {smells.map((smell, index) => (
+      {smells && smells.map((smell, index) => (
         <Chip
           key={index}
           label={smell}
@@ -33,8 +33,7 @@ const BadSmells: React.FC<BadSmellsProps> = ({ smells }) => {
         <DialogTitle>Información Detallada</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body1" style={{ margin: '4px' }}>
-          <pre style={{ whiteSpace: 'pre-wrap' }}> {selectedSmell}</pre>
-           
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{selectedSmell}</pre>
           </Typography>
         </DialogContent>
         <DialogActions>

@@ -11,8 +11,8 @@ interface Code {
   name: string;
   url: string;
   download_url: string | null;
-  extension: string; // Agregar propiedad de extensión
-  size: number; // Agregar propiedad de tamaño
+  extension: string; 
+  size: number; 
 }
 
 const GitHubCode: React.FC = () => {
@@ -35,10 +35,10 @@ const GitHubCode: React.FC = () => {
 
         const response = await axios.get(`${apiUrl}`);
 
-        const apiData: Code[] = response.data.map((item: any) => ({
+        const apiData: Code[] = Array.isArray(response.data) ? response.data.map((item: any) => ({
           ...item,
           extension: item.name.split('.').pop() || '',
-        }));
+        })) : [];
 
         const filteredCodes: Code[] = [];
 
@@ -151,7 +151,7 @@ const GitHubCode: React.FC = () => {
               
               <Box mt={2} width="100%">
                 <PieChartComponent data={extensionData} />
-                <CardCode codes={codes} setSelectedCode={setSelectedCode} setOpenModal={setOpenModal} />
+                <CardCode codes={codes} />
               </Box>
             )}  
               {codes.length === 0 ? (

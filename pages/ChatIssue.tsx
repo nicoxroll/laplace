@@ -30,13 +30,13 @@ const ChatComponent = () => {
 
           </div>
           <div style={{ maxHeight: 'calc(100% - 150px)', overflowY: 'auto' }}>
-            {messages.map((message, index) => (
-              <Card key={index} variant="outlined" style={{ marginBottom: '8px' }}>
-                <CardContent>
-                  <p>{message}</p>
-                </CardContent>
-              </Card>
-            ))}
+          {messages.map((msg, index) => (
+  <Card key={index} variant="outlined" style={{ marginBottom: '8px' }}>
+    <CardContent>
+      <p>{msg}</p>
+    </CardContent>
+  </Card>
+))}
           </div>
         </div>
       </Grid>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, CircularProgress, Box } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import CodeScan from './CodeSearch'
+import CodeScan from './CodeSearch';
 
 interface CodeDetailsDialogProps {
   code: any;
@@ -65,7 +65,7 @@ const CodeDetailsDialog: React.FC<CodeDetailsDialogProps> = ({ code, codeContent
       <DialogContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ overflowY: 'auto', flexGrow: 1 }}>
           <Typography variant="h6" gutterBottom>
-            {code.name}
+            {code && code.name}
           </Typography>
           <Typography variant="body1" gutterBottom>
             <pre style={{ whiteSpace: 'pre-wrap' }}>{codeContent}</pre>

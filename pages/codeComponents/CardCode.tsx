@@ -12,8 +12,6 @@ interface Code {
 
 interface CardCodeProps {
   codes: Code[];
-  setSelectedCode: React.Dispatch<React.SetStateAction<Code | null>>;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CardCode: React.FC<CardCodeProps> = ({ codes }) => {
@@ -72,22 +70,22 @@ const CardCode: React.FC<CardCodeProps> = ({ codes }) => {
 
   return (
     <Grid container spacing={2}>
-      {codes.map((code) => (
+      {codes && codes.map((code) => (
         <Grid item xs={12} sm={6} md={4} key={code.id}>
           <Card
             sx={{ height: '100%', cursor: 'pointer' }}
             onClick={() => handleCodeClick(code)}
           >
             <CardActionArea>
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {code.name}
-              </Typography>
-              {getIconByExtension(code.name || '')}
-              <Typography variant="body2" color="text.secondary">
-                Size: {formatSize(code.size)}
-              </Typography>
-            </CardContent>
+              <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                  {code.name}
+                </Typography>
+                {getIconByExtension(code.name || '')}
+                <Typography variant="body2" color="text.secondary">
+                  Size: {formatSize(code.size)}
+                </Typography>
+              </CardContent>
             </CardActionArea>
           </Card>
         </Grid>

@@ -22,20 +22,21 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
   };
 
   useEffect(() => {
-    if (openModal) {
+    if (openModal && issue) {
       initializeVariables();
       extractImageUrls();
     }
-  }, [openModal]);
+  }, [openModal, issue]);
 
   useEffect(() => {
     if (response) {
       const array = response.toString().split('--,*');
       setResponseArray(array);
-    } 
+    }
   }, [response]);
+
   const extractImageUrls = () => {
-    if (issue.body && issue.body.trim() !== '') {
+    if (issue && issue.body && issue.body.trim() !== '') {
       const regex = /\bhttps?:\/\/\S+\b/g;
       const matches = issue.body.match(regex);
       if (matches && matches.length > 0) {
@@ -46,23 +47,29 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
     }
   };
 
-  async function fetchOpenAI() {
-    const content = issue.title + ' --- ' + issue.body;
-    const response = await fetch('/api/agentSmell', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ issue: content }),
-    });
-    console.log(content);
-    const data = await response.json();
-    return data.result;
-  }
+  const fetchOpenAI = async () => {
+    try {
+      const content = (issue && issue.title ? issue.title : '') + ' --- ' + (issue && issue.body ? issue.body : '');
+      const response = await fetch('/api/agentSmell', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ issue: content }),
+      });
+      console.log(content);
+      const data = await response.json();
+      return data.result;
+    } catch (error) {
+      console.error('Error fetching OpenAI response:', error);
+      // Manejar el error según tus necesidades
+      throw error;
+    }
+  };
 
   const handleAnalyzeClick = async () => {
     try {
-      setResponseArray([])
+      setResponseArray([]);
       setLoading(true);
       const openAIResponse = await fetchOpenAI();
       setResponse(openAIResponse);
@@ -73,6 +80,10 @@ const IssueDetailsDialog: React.FC<IssueDetailsDialogProps> = ({ issue, openModa
       setLoading(false);
     }
   };
+
+  if (!issue) {
+    return null; // Otra opción sería mostrar un mensaje de error o un componente alternativo
+  }
 
   return (
     <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>

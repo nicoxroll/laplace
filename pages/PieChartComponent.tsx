@@ -5,9 +5,24 @@ interface PieChartProps {
   data: any[];
 }
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f50', '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF0000'];
+const COLORS = [
+  '#8884d8',
+  '#82ca9d',
+  '#ffc658',
+  '#ff7f50',
+  '#0088FE',
+  '#00C49F',
+  '#FFBB28',
+  '#FF8042',
+  '#AF19FF',
+  '#FF0000',
+];
 
 const PieChartComponent: React.FC<PieChartProps> = ({ data }) => {
+  if (!Array.isArray(data)) {
+    return null; // Otra opción sería mostrar un mensaje de error o un componente alternativo
+  }
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
