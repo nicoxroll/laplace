@@ -40,7 +40,7 @@ export default function Header(props: HeaderProps) {
             <Grid item xs />
             <Grid item>
               <Link
-                href="/"
+                href="https://github.com/nicoxroll/laplace"
                 variant="body2"
                 sx={{
                   textDecoration: 'none',

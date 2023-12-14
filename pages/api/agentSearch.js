@@ -1,7 +1,7 @@
 import { OpenAI } from "openai";
 import { TavilySearchAPIRetriever } from "langchain/retrievers/tavily_search_api";
 
-export const maxDuration = 25; // This function can run for a maximum of 5 seconds
+export const maxDuration = 25; 
 export const dynamic = 'force-dynamic';
 
 const openai = new OpenAI();

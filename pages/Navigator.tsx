@@ -60,7 +60,7 @@ export default function Navigator(props: DrawerProps) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          Paperbase
+          Proyecto LaPlace
         </ListItem>
         <ListItem sx={{ ...item, ...itemCategory }} onClick={() => navigateToRoute('/')}>
           <ListItemIcon>
