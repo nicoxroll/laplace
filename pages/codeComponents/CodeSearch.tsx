@@ -50,9 +50,9 @@ const CodeSearch = ({ smells }) => {
     return data.result;
   };
 
- return (
+  return (
     <div>
-      {Array.isArray(smells) && smells.map((smell, index) => (
+      {smells.map((smell, index) => (
         <Chip
           key={index}
           label={smell}
@@ -61,7 +61,8 @@ const CodeSearch = ({ smells }) => {
           onClick={() => handleOpenDialog(smell)}
         />
       ))}
-       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
         <DialogTitle>Información Detallada</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body1" style={{ margin: '4px' }}>
