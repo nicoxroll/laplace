@@ -3,7 +3,7 @@ import {  OpenAI } from "openai";
 const openai = new OpenAI();
 
 
-export const maxDuration = 25; 
+export const maxDuration = 40; 
 export const dynamic = 'force-dynamic';
 
 export default async function (req, res) {
@@ -20,17 +20,18 @@ export default async function (req, res) {
   }
 
   try {
+    //invoco a mi agente
     const assistant = await openai.beta.assistants.retrieve(process.env.ASSISTANT_API);
-
+    //creo el hilo
     const thread = await openai.beta.threads.create();
-    
+    //creo mi mensaje como usuario que solicita que analice el texto que le proporcionare
     const message = await openai.beta.threads.messages.create(thread.id, {
       role: "user",
       content: "No hagas preguntas, tampoco digas que no tenes acceso al archivo y Resume el siguiente contenido del texto y determina que BadSmell de UX/UI que hace referencia a alguno de tu base de conocimiento, dame una lista de los que hacen referencia. Si no estan dime a que otro se podria referir para agregar: "+req.body.issue
     });
 
     console.log(message)
-    
+    //creo un run, invoco al thread y al asistente
     const run = await openai.beta.threads.runs.create(thread.id, {
     assistant_id: assistant.id,
     })
