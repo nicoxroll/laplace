@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 export const config = {
   runtime: 'edge', // this is a pre-requisite
   // execute this function on iad1 or hnd1, based on the connecting client location
-  regions: ['iad1', 'us-east-1'],
+  regions: ['iad1', 'sfo1'],
 };
 
 export const maxDuration = 40; // This function can run for a maximum of 40 seconds
