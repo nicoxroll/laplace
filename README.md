@@ -14,4 +14,12 @@ busque un repositorio en la pagina como por ejemplo:
 "https://github.com/nicoxroll/laplace"
 
 
-Presione en Ver Detalles y Analizar para realizar una consulta con el agente personalizado
+Presione en Ver Detalles y Analizar para realizar una consulta en internet con el agente personalizado
+
+instale las dependencias:
+
+npm i
+
+correr el proyecto:
+
+npm run dev
