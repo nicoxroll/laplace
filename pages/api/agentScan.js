@@ -2,7 +2,7 @@ import {  OpenAI } from "openai";
 
 const openai = new OpenAI();
 
-export const maxDuration = 300; 
+export const maxDuration = 60; 
 
 export default async function (req, res) {
  
