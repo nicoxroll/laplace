@@ -3,7 +3,7 @@ import {  OpenAI } from "openai";
 const openai = new OpenAI();
 
 
-export const maxDuration = 40; 
+export const maxDuration = 300; 
 export const dynamic = 'force-dynamic';
 
 export default async function (req, res) {
