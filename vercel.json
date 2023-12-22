@@ -1,0 +1,13 @@
+{
+    "functions": {
+      "api/agentScan.js": {
+        "maxDuration": 30 
+      },
+      "api/agentSearch.js": {
+        "maxDuration": 60 
+      },
+      "api/agentSmell.js": {
+        "maxDuration": 60 
+      }
+    }
+  }
