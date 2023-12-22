@@ -1,12 +1,12 @@
 {
     "functions": {
-      "api/agentScan.js": {
-        "maxDuration": 30 
-      },
-      "api/agentSearch.js": {
+      "pages/api/agentScan.js": {
         "maxDuration": 60 
       },
-      "api/agentSmell.js": {
+      "pages/api/agentSearch.js": {
+        "maxDuration": 60 
+      },
+      "pages/api/agentSmell.js": {
         "maxDuration": 60 
       }
     }
