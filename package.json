@@ -14,7 +14,7 @@
     "@mui/material": "^5.14.18",
     "@types/node": "^20.9.1",
     "ai": "^2.2.27",
-    "axios": "^1.6.2",
+    "axios": "^1.6.4",
     "fs": "^0.0.1-security",
     "langchain": "^0.0.203",
     "mui": "^0.0.1",
