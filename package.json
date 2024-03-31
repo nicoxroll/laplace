@@ -24,7 +24,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0",
     "recharts": "^2.10.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vercel": "^33.0.1"
   },
   "engines": {
     "node": ">=16"
