@@ -22,7 +22,7 @@
     "openai": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.19.0",
+    "react-router-dom": "^6.30.3",
     "recharts": "^2.10.1",
     "typescript": "^5.2.2",
     "vercel": "^33.0.1"
